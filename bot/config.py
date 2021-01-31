@@ -10,7 +10,7 @@ OWNER_ID = 1085523376
 # Example: OWNER_ID = 619418070
 AUTHORISED_USERS = [-435668289]
 # Example: AUTHORISED_USERS = [63055333, 100483029, -1003943959]
-INDEX_URL = ""
+INDEX_URL = "https://github.com/ak1105034/TG-clonebot.git"
 IS_TEAM_DRIVE = True
 USE_SERVICE_ACCOUNTS = True
 # --------------------------------------
