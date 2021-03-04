@@ -1,59 +1,88 @@
-# Fclone_Tg_Bot
-⚫ This is just a Fclone only version of Telegram bot by [Smartass](https://github.com/smartass08) - [Here](https://github.com/smartass08/telegram_gcloner)
+# Why?
+For all my friends using my TDs who now need to store everything in it instead of their Drive. [Need help?](https://t.me/tgclonebot)
 
-🔷 Fclone is just another Tool like Autorclone/Folderclone/Gclone to bypass 750GB limit by google (more optimised for speed)
+<p align="center">
+<img src="https://i.imgur.com/CXy0SPB.jpg" alt="drawing" width="270" height=585/>
+</p>
 
-## 📗 Pre-requisites:-
-1. [Install Python 3.7+](https://www.python.org/downloads/)（Latest version 3.8.3 recommended）
-2. You need Generated SAs (using [Autorclone](https://github.com/xyou365/AutoRclone) or [Folderclone](https://github.com/Spazzlo/folderclone))
-3. Open **accounts** Folder (inside Autorclone or Folderclone Folder) and select any one of the json files and rename it as **1.json**
-4. Zip the accounts Folder and keep it safe
-5. Make a new bot from [Bot Father](https://core.telegram.org/bots#6-botfather) and get the **Bot token**
-6. Get your own Telegram ID - using this [bot](https://t.me/userinfobot)
+## Guide:
+- YouTube Guide: [Google Drive Clone Bot Set-Up Tutorial | Telegram Bot Setup Guide](https://www.youtube.com/watch?v=2r3_jR7SvUo&feature=youtu.be)
+  - Follow the above guide for Heroku.
+  - If you wish to run on a VPS, Do all the stuff I did on the VPS Terminal ;)
+  - Wish to run anywhere else? Follow the guide till the part where I download ZIP Archive from Repl.it. Use that zip on any device you'd like to run the bot on. 
+  - Don't forget to install requirements.txt
+    ```
+    pip3 install -r requirements.txt
+    ```
+- [Adding Service Accounts to Google Group/TeamDrive](https://youtu.be/pBfsmJhYr78)
 
-## 📙 Installation:-
-1. Download the Zip version of this repo or clone this repo using the command below
+## Setting up config file (present in bot/config.py)
+- **BOT_TOKEN** : The telegram bot token that you get from @BotFather
+- **GDRIVE_FOLDER_ID** : This is the folder ID of the Google Drive Folder to which you want to clone.
+- **OWNER_ID** : The Telegram user ID (not username) of the owner of the bot (if you do not have that, send /id to @kelverbot )
+- **AUTHORISED_USERS** : The Telegram user IDs (not username) of people you wish to allow for bot access.It can also be group chat id. Write like: [123456, 4030394, -1003823820]
+- **IS_TEAM_DRIVE** : (Optional field) Set to True if GDRIVE_FOLDER_ID is from a Team Drive else False or Leave it empty.
+- **USE_SERVICE_ACCOUNTS**: (Optional field) (Leave empty if unsure) Whether to use service accounts or not. For this to work see  "Using service accounts" section below.
+- **INDEX_URL** : (Optional field) Refer to https://github.com/maple3142/GDIndex/ The URL should not have any trailing '/'
+
+## Getting Google OAuth API credential file
+
+- Visit the [Google Cloud Console](https://console.developers.google.com/apis/credentials)
+- Go to the OAuth Consent tab, fill it, and save.
+- Go to the Credentials tab and click Create Credentials -> OAuth Client ID
+- Choose Other and Create.
+- Use the download button to download your credentials.
+- Move that file to the root of clone-bot, and rename it to credentials.json
+- Visit [Google API page](https://console.developers.google.com/apis/library)
+- Search for Drive and enable it if it is disabled
+- Finally, run the script to generate token file (token.pickle) for Google Drive:
 ```
-git clone https://github.com/roshanconnor123/Fclone_Tg_Bot
+pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+python3 generate_drive_token.py
 ```
-2. Unzip the Repository and Open CMD inside it (if u used git clone - Change directory to cloned repository)- and run this
+# Running
+- To run this bot (locally) (suggested)
 ```
-pip install -r requirements.txt
+python3 -m bot
 ```
-3. Open config.sample.ini (Its inside telegram_gcloner Folder) - Fill the appropriate values
+- Deploying to Heroku (Optional) (Not Suitable for very big Clones!)
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https://github.com/jagrit007/Telegram-CloneBot)
+
+- Please know that after using this button, your work isn't done. You gotta [clone heroku app](https://devcenter.heroku.com/articles/git-clone-heroku-app) and add credentials.json and token.pickle (By now you would know how to make it.) and this is the perfect time to generate service accounts if you wish to use them. After it's all done, [Push changes to Heroku (Step1-2 only).](https://docs.railsbridge.org/intro-to-rails/deploying_to_heroku_again)
+
+**Tip: Instead of using Termux or local machine, use [repl.it](https://repl.it/), atleast it won't throw any errors in installing Python requirements. From [repl.it](https://repl.it/) you could push to a private GitHub repo and attach that to Heroku.**
+
+
+# Using service accounts for uploading to avoid user rate limit
+For Service Account to work, you must set USE_SERVICE_ACCOUNTS=True in config file or environment variables
+Many thanks to [AutoRClone](https://github.com/xyou365/AutoRclone) for the scripts
+## Generating service accounts
+Step 1. Generate service accounts [What is service account](https://cloud.google.com/iam/docs/service-accounts)
+---------------------------------
+Let us create only the service accounts that we need. 
+**Warning:** abuse of this feature is not the aim of autorclone and we do **NOT** recommend that you make a lot of projects, just one project and 100 sa allow you plenty of use, its also possible that overabuse might get your projects banned by google. 
+
 ```
-[General]
-path_to_gclone =./fclone
-
-telegram_token = telegram bot token
-user_ids = Your Telegram ID (multiple separated by commas, first ID is admin)
-group_ids = Your Telegram Group ID (If you are not adding the bot to any group - you can leave it blank)
-
-gclone_para_override = Leave it Blank
+Note: 1 service account can copy around 750gb a day, 1 project makes 100 service accounts so thats 75tb a day, for most users this should easily suffice. 
 ```
-4. After filling appropriate values - rename it as config.ini and save it
 
-## 🍎 Running the Bot
-🔷 Running in your own System - `python telegram_gcloner.py`
+`python3 gen_sa_accounts.py --quick-setup 1 --new-only`
 
-🔶 Running it in Heroku:-
+A folder named accounts will be created which will contain keys for the service accounts created
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?template=https://github.com/lukaskronus/Tg-fclone/tree/master)
+NOTE: If you have created SAs in past from this script, you can also just re download the keys by running:
+```
+python3 gen_sa_accounts.py --download-keys project_id
+```
 
-1. Create one app in Heroku
-2. Push the Files to Heroku using Heroku CLI
-3. Once its done - go to Telegram Bot you created before and Press **Start**
-4. Upload the **accounts.zip** (we created before) to the bot
-5. Reply to the message with `/sa`
-6. Type /`folders` and set your favourite Folders
-7. Send or forward a message with a Google Drive link to the bot to start Copying...
+### Add all the service accounts to the Team Drive or folder
+- Run:
+```
+python3 add_to_team_drive.py -d SharedTeamDriveSrcID
+```
 
-## Credits:
-🧠 [wrenfairbank](https://github.com/wrenfairbank) - [Here](https://github.com/wrenfairbank/telegram_gcloner) - Original Author of the Bot
-
-🧠 [Seiko](https://github.com/thegreatestminer) - [Here](https://github.com/thegreatestminer/telegram_gcloner) - Made the English version 
-
-🧠 [Smartass](https://github.com/smartass08) - [Here](https://github.com/smartass08/telegram_gcloner) - Added docker and Heroku support
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/roshanconnor123/Fclone_Tg_Bot/blob/master/LICENSE) file for details
+### Credits
+- https://github.com/jagrit007
+- https://github.com/lzzy12/python-aria-mirror-bot
+- https://github.com/xyou365/AutoRclone
