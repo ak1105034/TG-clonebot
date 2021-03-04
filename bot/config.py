@@ -4,7 +4,7 @@ from distutils.util import strtobool as stb
 
 # --------------------------------------
 BOT_TOKEN = "1638369005:AAGOaWz4v5xeo984D6BPSdVAb8tt34aGj7I"
-GDRIVE_FOLDER_ID = "0ACyRPtY2z3qIUk9PVA"
+GDRIVE_FOLDER_ID = "0AIoODpByOoxiUk9PVA"
 # Default folder id.
 OWNER_ID = 1085523376
 # Example: OWNER_ID = 619418070
